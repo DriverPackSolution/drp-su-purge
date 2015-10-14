@@ -9,12 +9,14 @@ var CLOUDFLARE_KEY = process.env.CLOUDFLARE_KEY;
 
 var handler = createHandler({path: '/deploy', secret: GITHUB_SECRET})
 
+var port = process.env.PORT || 3000
+
 http.createServer(function (req, res) {
   handler(req, res, function (err) {
     res.statusCode = 404
     res.end('no such location')
   })
-}).listen(3000)
+}).listen(port)
 
 handler.on('error', function (err) {
   console.error('Error:', err.message)
