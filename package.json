@@ -1,4 +1,7 @@
 {
+  "scripts": {
+    "start": "node index.js"
+  },
   "dependencies": {
     "github-webhook-handler": "0.5.0",
     "superagent": "1.4.0"
