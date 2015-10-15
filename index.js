@@ -2,6 +2,8 @@ var http = require('http')
 var createHandler = require('github-webhook-handler')
 var request = require('superagent')
 
+require('console-stamp')(console)
+
 var GITHUB_SECRET = process.env.GITHUB_SECRET;
 var CLOUDFLARE_ZONE = process.env.CLOUDFLARE_ZONE;
 var CLOUDFLARE_EMAIL = process.env.CLOUDFLARE_EMAIL;

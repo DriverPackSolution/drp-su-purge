@@ -3,6 +3,7 @@
     "start": "node index.js"
   },
   "dependencies": {
+    "console-stamp": "0.2.0",
     "github-webhook-handler": "0.5.0",
     "superagent": "1.4.0"
   }
