@@ -25,23 +25,26 @@ handler.on('error', function (err) {
 })
 
 handler.on('push', function (event) {
-  console.log('Received a push event for %s to %s',
-    event.payload.repository.name,
-    event.payload.ref)
-  if (event.payload.ref !== 'refs/heads/master') {
-    return
-  }
-  console.log('master was deployed, purging cache...')
-  request.del('https://api.cloudflare.com/client/v4/zones/' + CLOUDFLARE_ZONE + '/purge_cache')
-    .set('X-Auth-Email', CLOUDFLARE_EMAIL)
-    .set('X-Auth-Key', CLOUDFLARE_KEY)
-    .set('Content-Type', 'application/json')
-    .send({purge_everything: true})
-    .end(function (err, res) {
-      if (err) {
-        console.log('cloudflare: failed to reset cache', err)
-      } else {
-        console.log('cloudflare: reset cache', res.body)
-      }
-    })
+  // 60 second delay as a workaround for race condition with git pull
+  setTimeout(function () {
+    console.log('Received a push event for %s to %s',
+      event.payload.repository.name,
+      event.payload.ref)
+    if (event.payload.ref !== 'refs/heads/master') {
+      return
+    }
+    console.log('master was deployed, purging cache...')
+    request.del('https://api.cloudflare.com/client/v4/zones/' + CLOUDFLARE_ZONE + '/purge_cache')
+      .set('X-Auth-Email', CLOUDFLARE_EMAIL)
+      .set('X-Auth-Key', CLOUDFLARE_KEY)
+      .set('Content-Type', 'application/json')
+      .send({purge_everything: true})
+      .end(function (err, res) {
+        if (err) {
+          console.log('cloudflare: failed to reset cache', err)
+        } else {
+          console.log('cloudflare: reset cache', res.body)
+        }
+      })
+  }, 60000)
 })
